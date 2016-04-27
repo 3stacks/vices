@@ -1,17 +1,27 @@
 import React from 'react';
+import TextField from 'material-ui/lib/text-field';
+import SelectField from 'material-ui/lib/select-field';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 
 export const ViceInput = function(props) {
-    <form>
+    return (<form>
         <label>
             What is your vice?
-            <input type="text"/>
+            <TextField
+                hintText="Ice Break"
+            />
         </label>
         <label>
             How much does it cost you?
-            <input type="number"/>
-            <select></select>
+            <TextField/>
         </label>
-    </form>
+        <SelectField>
+            <MenuItem value="Daily" primaryText="Daily"/>
+            <MenuItem value="Weekly" primaryText="Weekly"/>
+            <MenuItem value="Monthly" primaryText="Monthly"/>
+            <MenuItem value="Yearly" primaryText="Yearly"/>
+        </SelectField>
+    </form>);
 };
 
 export default ViceInput;
