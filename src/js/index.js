@@ -4,6 +4,11 @@ import AppBar from 'material-ui/lib/app-bar';
 import ViceInput from '../components/vice-input.jsx';
 import ResultPage from '../components/result-page.jsx';
 const AjaxEvent = require('ajax-event');
+
+import IconButton from 'material-ui/lib/icon-button';
+import IconMenu from 'material-ui/lib/menus/icon-menu';
+import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 // const appId = 'QGGV3X-U5KRQYAPU2';
 // const wolfram = require('wolfram').createClient(appId);
 /**
@@ -127,9 +132,23 @@ const styles = {
 const App = function(props) {
     return (
         <div>
-            <AppBar showMenuIconButton={false} title="Vices"/>
-            {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
-            {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
+            <AppBar
+                showMenuIconButton={false}
+                iconElementRight={
+                    <IconMenu
+                    iconButtonElement={
+                      <IconButton>
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    >
+                    <MenuItem primaryText="About the app" onclick={}/>
+                    <MenuItem primaryText="Return home" />
+                    </IconMenu>
+                }
+                title="Vices"/>
             <main style={styles.main}>
                 {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
                 {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
