@@ -114,12 +114,26 @@ function fetchCostCoefficient(country) {
     })
 }
 
+const styles = {
+    main: {
+        padding: '30px',
+        maxWidth: '500px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        textAlign: 'center'
+    }
+};
+
 const App = function(props) {
     return (
         <div>
             <AppBar showMenuIconButton={false} title="Vices"/>
             {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
             {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
+            <main style={styles.main}>
+                {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
+                {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
+            </main>
         </div>);
 };
 
