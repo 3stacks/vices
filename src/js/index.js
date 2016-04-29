@@ -167,6 +167,7 @@ const App = function(props) {
             <main style={styles.main}>
                 {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
                 {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
+                {currentPage === 'aboutPage' ? <AboutPage/> : null}
             </main>
         </div>);
 };
