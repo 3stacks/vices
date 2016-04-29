@@ -4,7 +4,7 @@ import CircularProgress from 'material-ui/lib/circular-progress';
 export const ResultPage = function(props) {
     return (
         <div>
-            {props.event.isExecuting() ? <CircularProgress size={1.5}/> : null}
+            {props.event.isExecuting() ? <CircularProgress/> : null}
             {props.event.isSuccessful() ?
                 <div>
                     <h2>
@@ -29,7 +29,8 @@ export const ResultPage = function(props) {
                         Alright, that's a lot of burritos.
                     </p>
                 </div>
-                : null}
+                : null
+            }
         </div>
     )
 };
