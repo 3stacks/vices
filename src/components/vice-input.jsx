@@ -50,7 +50,7 @@ export const ViceInput = function({methods, data, ...props}) {
         </h2>
         <div>
             <label>
-
+                {props.currency.symbol}
                 <TextField
                     value={data.cost}
                     onChange={onCostChanged}
