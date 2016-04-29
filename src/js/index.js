@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import AppBar from 'material-ui/lib/app-bar';
 import ViceInput from '../components/vice-input.jsx';
 import ResultPage from '../components/result-page.jsx';
+import AboutPage from '../components/about-page.jsx';
 const AjaxEvent = require('ajax-event');
 
 import IconButton from 'material-ui/lib/icon-button';
@@ -27,6 +28,7 @@ let appHistory = [];
 global.appHistory = appHistory;
 
 const actionTypes = {
+    ON_ABOUT_BUTTON_PRESSED: 'ON_ABOUT_BUTTON_PRESSED',
     ON_FREQUENCY_CHANGED: 'ON_FREQUENCY_CHANGED',
     ON_COST_CHANGED: 'ON_COST_CHANGED',
     FORM_SUBMITTED: 'FORM_SUBMITTED',
@@ -61,6 +63,9 @@ function modelHandler(action) {
         case actionTypes.ON_RESULT_CALCULATED:
             viceInputProps.data.annualExpenditure = action.payload;
             viceInputProps.data.calculateCostEvent.resolve();
+            break;
+        case actionTypes.ON_ABOUT_BUTTON_PRESSED:
+            currentPage = 'aboutPage';
             break;
         default:
             throw new RangeError('Unknown event type')
@@ -128,6 +133,16 @@ const styles = {
         textAlign: 'center'
     }
 };
+
+function onAboutButtonPressed() {
+    modelHandler({
+        type: 'ON_ABOUT_BUTTON_PRESSED'
+    })
+}
+    } else if (currentPage === 'resultsPage' || currentPage === 'aboutPage') {
+        return (<NavigationChevronLeft color='white' style={{ paddingTop: 11  }} onClick={onMenuButtonPressed}/>);
+    }
+}
 
 const App = function(props) {
     return (
