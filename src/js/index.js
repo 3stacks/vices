@@ -201,8 +201,8 @@ const App = function(props) {
                 showMenuIconButton={true}
                 title="Vices"/>
             <main style={styles.main}>
-                {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
-                {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} /> : null}
+                {currentPage === 'formPage' ? <ViceInput {...viceInputProps} currency={userCurrency}/> : null}
+                {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} currency={userCurrency}/> : null}
                 {currentPage === 'aboutPage' ? <AboutPage/> : null}
             </main>
         </div>);
