@@ -4,7 +4,6 @@ import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import RaisedButton from 'material-ui/lib/raised-button';
 import frequencyOptions from '../js/frequency-options.js';
-
 function validateInputs(input) {
     const errorArray = [];
     if (!frequencyOptions.map(option => option.annualFrequency).includes(input.select)) {
@@ -16,7 +15,7 @@ function validateInputs(input) {
     return errorArray;
 }
 
-export const ViceInput = function({methods, data}) {
+export const ViceInput = function({methods, data, ...props}) {
     function onCostChanged(event, value) {
         methods.onCostChanged(event, value);
         if (data.cost === '0') {
