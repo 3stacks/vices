@@ -4,14 +4,9 @@ import AppBar from 'material-ui/lib/app-bar';
 import ViceInput from '../components/vice-input.jsx';
 import ResultPage from '../components/result-page.jsx';
 import AboutPage from '../components/about-page.jsx';
+import NavigationChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
+import ActionHelp from 'material-ui/lib/svg-icons/action/help';
 const AjaxEvent = require('ajax-event');
-
-import IconButton from 'material-ui/lib/icon-button';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-// const appId = 'QGGV3X-U5KRQYAPU2';
-// const wolfram = require('wolfram').createClient(appId);
 /**
  * Enable click events for Material-UI components
  *
@@ -28,6 +23,7 @@ let appHistory = [];
 global.appHistory = appHistory;
 
 const actionTypes = {
+    ON_MENU_BUTTON_PRESSED: 'ON_MENU_BUTTON_PRESSED',
     ON_ABOUT_BUTTON_PRESSED: 'ON_ABOUT_BUTTON_PRESSED',
     ON_FREQUENCY_CHANGED: 'ON_FREQUENCY_CHANGED',
     ON_COST_CHANGED: 'ON_COST_CHANGED',
@@ -63,6 +59,9 @@ function modelHandler(action) {
         case actionTypes.ON_RESULT_CALCULATED:
             viceInputProps.data.annualExpenditure = action.payload;
             viceInputProps.data.calculateCostEvent.resolve();
+            break;
+        case actionTypes.ON_MENU_BUTTON_PRESSED:
+            currentPage = 'formPage';
             break;
         case actionTypes.ON_ABOUT_BUTTON_PRESSED:
             currentPage = 'aboutPage';
@@ -134,11 +133,21 @@ const styles = {
     }
 };
 
+function onMenuButtonPressed() {
+    modelHandler({
+        type: 'ON_MENU_BUTTON_PRESSED'
+    })
+}
+
 function onAboutButtonPressed() {
     modelHandler({
         type: 'ON_ABOUT_BUTTON_PRESSED'
     })
 }
+
+function showWhichIcon() {
+    if (currentPage === 'formPage') {
+        return (<ActionHelp color='white' style={{ paddingTop: 11  }} onClick={onAboutButtonPressed}/>);
     } else if (currentPage === 'resultsPage' || currentPage === 'aboutPage') {
         return (<NavigationChevronLeft color='white' style={{ paddingTop: 11  }} onClick={onMenuButtonPressed}/>);
     }
@@ -148,21 +157,8 @@ const App = function(props) {
     return (
         <div>
             <AppBar
-                showMenuIconButton={false}
-                iconElementRight={
-                    <IconMenu
-                    iconButtonElement={
-                      <IconButton>
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                    >
-                    <MenuItem primaryText="About the app" onclick={}/>
-                    <MenuItem primaryText="Return home" />
-                    </IconMenu>
-                }
+                iconElementLeft={showWhichIcon()}
+                showMenuIconButton={true}
                 title="Vices"/>
             <main style={styles.main}>
                 {currentPage === 'formPage' ? <ViceInput {...viceInputProps} /> : null}
