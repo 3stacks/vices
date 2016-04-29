@@ -67,7 +67,7 @@ export const ViceInput = function({methods, data}) {
                 onChange={methods.frequencyChangeCallback}
                 floatingLabelText="How often do you buy it?"
                 errorText={data.errorMessages.select === null ? '' : data.errorMessages.select}
-                style={{ textAlign: 'left' }}
+                style={{ textAlign: 'left', marginBottom: 20 }}
             >
                 {data.frequencyOptions.map(function(frequencyOption) {
                     return <MenuItem key={frequencyOption.annualFrequency} value={frequencyOption.annualFrequency} primaryText={frequencyOption.label}/>
