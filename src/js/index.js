@@ -15,6 +15,46 @@ const AjaxEvent = require('ajax-event');
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
+function getCurrencyFromLanguage() {
+    const userLanguage = navigator.languages[0];
+    const availableCurrencies = {
+        'en-AU': {
+            symbol: '$',
+            code: 'AUD'
+        },
+        'en-US': {
+            symbol: '$',
+            code: 'USD'
+        },
+        'fr': {
+            symbol: '€',
+            code: 'EUR'
+        },
+        'ja': {
+            symbol: '¥',
+            code: 'JPY'
+        },
+        'de-DE': {
+            symbol: '€',
+            code: 'EUR'
+        },
+        'it': {
+            symbol: '€',
+            code: 'EUR'
+        },
+        'en-GB': {
+            symbol: '£',
+            code: 'GBP'
+        }
+    };
+    if (availableCurrencies[userLanguage] === undefined) {
+        return availableCurrencies['en-US'];
+    }
+    return availableCurrencies[userLanguage];
+}
+
+const userCurrency = getCurrencyFromLanguage();
+
 import frequencyOptions from './frequency-options.js';
 
 // Initial state of app history
