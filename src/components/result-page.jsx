@@ -16,7 +16,6 @@ getCurrency().then(function(response) {
 });
 
 export const ResultPage = function(props) {
-    console.log(priceIndex);
     const currencyMultiplier = priceIndex.data.rates[props.currency.code];
     const burritoIndex = 8.65;
     return (
