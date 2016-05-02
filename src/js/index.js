@@ -15,8 +15,17 @@ const AjaxEvent = require('ajax-event');
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
+function getUserLanguage() {
+    if (navigator.languages !== undefined && navigator.languages !== null) {
+        return navigator.languages[0];
+    }
+    else {
+        return 'en-US';
+    }
+}
+
 function getCurrencyFromLanguage() {
-    const userLanguage = navigator.languages[0];
+    const userLanguage = getUserLanguage();
     const availableCurrencies = {
         'en-AU': {
             symbol: '$',

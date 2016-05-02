@@ -3,14 +3,20 @@ import CircularProgress from 'material-ui/lib/circular-progress';
 import getCurrency from '../js/api';
 
 const priceIndex = {
-    data: {}
+    data: {
+        rates: {
+            USD: 1
+        }
+    }
 };
 
 getCurrency().then(function(response) {
     priceIndex.data = response.data;
+    priceIndex.data.rates.USD = 1;
 });
 
 export const ResultPage = function(props) {
+    console.log(priceIndex);
     const currencyMultiplier = priceIndex.data.rates[props.currency.code];
     const burritoIndex = 8.65;
     return (
