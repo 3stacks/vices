@@ -1,8 +1,8 @@
 import React from 'react';
-import TextField from 'material-ui/text-field';
-import SelectField from 'material-ui/select-field';
-import MenuItem from 'material-ui/menus/menu-item';
-import RaisedButton from 'material-ui/raised-button';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 import frequencyOptions from '../js/frequency-options.js';
 
 function validateInputs(input) {

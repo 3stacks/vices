@@ -1,5 +1,5 @@
 import React from 'react';
-import CircularProgress from 'material-ui/circular-progress';
+import CircularProgress from 'material-ui/CircularProgress';
 import getCurrency from '../js/api';
 
 const priceIndex = {
