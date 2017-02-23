@@ -1,18 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-import AppBar from 'material-ui/lib/app-bar';
+import AjaxEvent from 'ajax-event';
 import ViceInput from '../components/vice-input.jsx';
 import ResultPage from '../components/result-page.jsx';
 import AboutPage from '../components/about-page.jsx';
-import NavigationChevronLeft from 'material-ui/lib/svg-icons/navigation/chevron-left';
-import ActionHelp from 'material-ui/lib/svg-icons/action/help';
-const AjaxEvent = require('ajax-event');
-/**
- * Enable click events for Material-UI components
- *
- * @see {@link https://github.com/callemall/material-ui/issues/2581}
- */
-const injectTapEventPlugin = require("react-tap-event-plugin");
+import AppBar from 'material-ui/AppBar';
+import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import ActionHelp from 'material-ui/svg-icons/action/help';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 function getUserLanguage() {
@@ -204,17 +200,20 @@ function showWhichIcon() {
 
 const App = function(props) {
     return (
-        <div>
-            <AppBar
-                iconElementLeft={showWhichIcon()}
-                showMenuIconButton={true}
-                title="Vices"/>
-            <main style={styles.main}>
-                {currentPage === 'formPage' ? <ViceInput {...viceInputProps} currency={userCurrency}/> : null}
-                {currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} currency={userCurrency}/> : null}
-                {currentPage === 'aboutPage' ? <AboutPage/> : null}
-            </main>
-        </div>);
+        <MuiThemeProvider>
+			<div>
+				<AppBar
+					iconElementLeft={showWhichIcon()}
+					showMenuIconButton={true}
+					title="Vices"/>
+				<main style={styles.main}>
+					{currentPage === 'formPage' ? <ViceInput {...viceInputProps} currency={userCurrency}/> : null}
+					{currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} currency={userCurrency}/> : null}
+					{currentPage === 'aboutPage' ? <AboutPage/> : null}
+				</main>
+			</div>
+		</MuiThemeProvider>
+	);
 };
 
 const mainElement = document.getElementById('app');
