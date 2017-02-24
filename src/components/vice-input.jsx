@@ -17,12 +17,14 @@ function validateInputs(input) {
 }
 
 export default function({methods, data, ...props}) {
+
     function onCostChanged(event, value) {
         methods.onCostChanged(event, value);
         if (data.cost === '0') {
             methods.dispatchErrorMessage('cost', 'Use something other than 0 ya dingus');
         }
     }
+
     function getWut() {
         if (data.cost === '0') {
             return <img src="img/wut.jpg" alt="wut"/>;
@@ -31,6 +33,7 @@ export default function({methods, data, ...props}) {
             return null;
         }
     }
+
     function formSubmit(event) {
         event.preventDefault();
         const inputsToValidate = {
@@ -45,6 +48,7 @@ export default function({methods, data, ...props}) {
             })
         }
     }
+
     return (<form onSubmit={formSubmit}>
         <h2>
             What is your vice?
