@@ -44,6 +44,7 @@ export const ResultPage = function(props) {
                     <p>
                         Alright, that's a lot of burritos.
                     </p>
+					<img style={{height: 128, width: 128}} src="img/burrito.jpg" alt=""/>
                 </div>
                 : null
             }
