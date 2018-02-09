@@ -3,11 +3,11 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-import frequencyOptions from '../js/frequency-options.js';
+import {FREQUENCY_OPTIONS} from '../constants/index.js';
 
 function validateInputs(input) {
     const errorArray = [];
-    if (!frequencyOptions.map(option => option.annualFrequency).includes(input.select)) {
+    if (!FREQUENCY_OPTIONS.map(option => option.annualFrequency).includes(input.select)) {
         errorArray.push({
             name: 'select',
             message: 'The select field was passed an invalid option. Please choose from the provided options'
@@ -73,7 +73,7 @@ export default function({methods, data, ...props}) {
                 errorText={data.errorMessages.select === null ? '' : data.errorMessages.select}
                 style={{ textAlign: 'left', marginBottom: 20 }}
             >
-                {data.frequencyOptions.map(function(frequencyOption) {
+                {data.FREQUENCY_OPTIONS.map(function(frequencyOption) {
                     return <MenuItem key={frequencyOption.annualFrequency} value={frequencyOption.annualFrequency} primaryText={frequencyOption.label}/>
                 })}
             </SelectField>

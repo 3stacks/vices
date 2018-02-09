@@ -1,15 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
 import AjaxEvent from 'ajax-event';
-import ViceInput from '../components/vice-input.jsx';
-import ResultPage from '../components/result-page.jsx';
-import AboutPage from '../components/about-page.jsx';
+import ViceInput from './components/vice-input.jsx';
+import ResultPage from './components/result-page.jsx';
+import AboutPage from './components/about-page.jsx';
 import AppBar from 'material-ui/AppBar';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import ActionHelp from 'material-ui/svg-icons/action/help';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+import App from './components/app.jsx';
 
 function getUserLanguage() {
     if (navigator.languages !== undefined && navigator.languages !== null) {
@@ -60,7 +61,7 @@ function getCurrencyFromLanguage() {
 
 const userCurrency = getCurrencyFromLanguage();
 
-import frequencyOptions from './frequency-options.js';
+import {FREQUENCY_OPTIONS} from './constants/index.js';
 
 // Initial state of app history
 let appHistory = [];
@@ -152,7 +153,7 @@ const viceInputProps = {
         calculateCostEvent: new AjaxEvent(),
         name: '',
         cost: '',
-        frequencyOptions: frequencyOptions,
+        frequencyOptions: FREQUENCY_OPTIONS,
         selectedFrequency: 365,
         annualExpenditure: null,
         errorMessages: {
@@ -198,28 +199,11 @@ function showWhichIcon() {
     }
 }
 
-const App = function(props) {
-    return (
-        <MuiThemeProvider>
-			<div>
-				<AppBar
-					iconElementLeft={showWhichIcon()}
-					showMenuIconButton={true}
-					title="Vices"/>
-				<main style={styles.main}>
-					{currentPage === 'formPage' ? <ViceInput {...viceInputProps} currency={userCurrency}/> : null}
-					{currentPage === 'resultsPage' ? <ResultPage event={viceInputProps.data.calculateCostEvent} result={viceInputProps.data.annualExpenditure} currency={userCurrency}/> : null}
-					{currentPage === 'aboutPage' ? <AboutPage/> : null}
-				</main>
-			</div>
-		</MuiThemeProvider>
-	);
-};
-
-const mainElement = document.getElementById('app');
-
 function doRender() {
-    render(<App/>, mainElement);
+    render(
+    	React.createElement(App),
+		document.getElementById('app')
+	);
 }
 
 doRender();

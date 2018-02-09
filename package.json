@@ -2,8 +2,9 @@
   "name": "Vices",
   "version": "1.0.0",
   "description": "",
-  "main": "index.jsx",
+  "main": "src/index.js",
   "scripts": {
+  	"start": "npm run watch",
     "clean": "rm -rf dist",
     "prepare-dirs": "mkdir dist",
     "build": "NODE_ENV=production && npm run build-primer && concurrently \"npm run build-core\" \"npm run build-extra-resources\"",
