@@ -2,28 +2,21 @@ import React from 'react';
 import {InputNumber, Select, Button} from 'antd';
 const Option = Select.Option;
 
-function calculateAbsoluteCostPerDecade(moneyWastedPerYear, acc = [], year = 1) {
-	const lastItem = acc[acc.length - 1];
-	const lostSoFar = !!lastItem ? moneyWastedPerYear + lastItem.cost : moneyWastedPerYear;
+function calculateAbsoluteCostPerDecade(moneyWastedPerYear, acc = [], cumulativeCost = 0, year = 1) {
+	const lostSoFar = cumulativeCost + moneyWastedPerYear;
 	const wastedAfterInterest = calculateAbsoluteCostPerYear(lostSoFar);
 
-	if (year < 10) {
+	if (year <= 10) {
 		return [
 			...acc,
 			{
 				year,
 				cost: wastedAfterInterest
 			},
-			...calculateAbsoluteCostPerDecade(moneyWastedPerYear + wastedAfterInterest, acc, year + 1)
+			...calculateAbsoluteCostPerDecade(moneyWastedPerYear, acc, wastedAfterInterest, year + 1)
 		];
 	} else {
-		return [
-			...acc,
-			{
-				year,
-				cost: wastedAfterInterest
-			}
-		];
+		return acc;
 	}
 }
 
@@ -190,7 +183,6 @@ export default class App extends React.Component {
 							</tr>
 							</thead>
 							<tbody>
-							{console.log(calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear))}
 							{calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear).map(({year, cost}) => {
 								return (
 									<tr>
@@ -198,7 +190,7 @@ export default class App extends React.Component {
 											{year}
 										</td>
 										<td>
-											${cost}
+											${Math.round(cost)}
 										</td>
 									</tr>
 								);
