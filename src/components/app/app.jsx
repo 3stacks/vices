@@ -140,7 +140,7 @@ export default class App extends React.Component {
 						</Select>
 					</label>
 					<Button
-						type="submit"
+						htmlType="submit"
 					>
 						Calculate
 					</Button>
