@@ -2,6 +2,36 @@ import React from 'react';
 import {InputNumber, Select, Button} from 'antd';
 const Option = Select.Option;
 
+function calculateAbsoluteCostPerDecade(moneyWastedPerYear, acc = [], year = 1) {
+	const lastItem = acc[acc.length - 1];
+	const lostSoFar = !!lastItem ? moneyWastedPerYear + lastItem.cost : moneyWastedPerYear;
+	const wastedAfterInterest = calculateAbsoluteCostPerYear(lostSoFar);
+
+	if (year < 10) {
+		return [
+			...acc,
+			{
+				year,
+				cost: wastedAfterInterest
+			},
+			...calculateAbsoluteCostPerDecade(moneyWastedPerYear + wastedAfterInterest, acc, year + 1)
+		];
+	} else {
+		return [
+			...acc,
+			{
+				year,
+				cost: wastedAfterInterest
+			}
+		];
+	}
+}
+
+function calculateAbsoluteCostPerYear(moneyWastedSoFar) {
+	const interest = moneyWastedSoFar * 0.04;
+	return moneyWastedSoFar + interest;
+}
+
 export default class App extends React.Component {
 	state = {
 		moneyValue: '',
@@ -36,7 +66,7 @@ export default class App extends React.Component {
 
 					return {
 						...state,
-						moneyWastedPerYear: moneyWastedPerDecade / 10,
+						moneyWastedPerYear: state.moneyValue * 365,
 						moneyWastedPerDecade
 					}
 				});
@@ -47,7 +77,7 @@ export default class App extends React.Component {
 
 					return {
 						...state,
-						moneyWastedPerYear: moneyWastedPerDecade / 10,
+						moneyWastedPerYear: state.moneyValue * 52,
 						moneyWastedPerDecade
 					}
 				});
@@ -58,7 +88,7 @@ export default class App extends React.Component {
 
 					return {
 						...state,
-						moneyWastedPerYear: moneyWastedPerDecade / 10,
+						moneyWastedPerYear: state.moneyValue * 12,
 						moneyWastedPerDecade
 					}
 				});
@@ -69,7 +99,7 @@ export default class App extends React.Component {
 
 					return {
 						...state,
-						moneyWastedPerYear: moneyWastedPerDecade / 10,
+						moneyWastedPerYear: state.moneyValue,
 						moneyWastedPerDecade
 					}
 				});
@@ -126,24 +156,56 @@ export default class App extends React.Component {
 					Calculate
 				</Button>
 				{!!this.state.moneyWastedPerYear && (
-					<dl>
-						<div>
-							<dt>
-								Approximate cost per year:
-							</dt>
-							<dd>
-								${this.state.moneyWastedPerYear}
-							</dd>
-						</div>
-						<div>
-							<dt>
-								Approximate cost over 10 years (based on average 4% returns for investments):
-							</dt>
-							<dd>
-								${this.state.moneyWastedPerDecade}
-							</dd>
-						</div>
-					</dl>
+					<div>
+						<dl>
+							<div>
+								<dt>
+									Cost per year:
+								</dt>
+								<dd>
+									${this.state.moneyWastedPerYear}
+								</dd>
+							</div>
+							<div>
+								<dt>
+									Approximate cost over 10 years (based on average 4% returns for investments):
+								</dt>
+								<dd>
+									${this.state.moneyWastedPerDecade}
+								</dd>
+							</div>
+						</dl>
+						<p>
+							If you invested that money instead:
+						</p>
+						<table>
+							<thead>
+							<tr>
+								<td>
+									Year
+								</td>
+								<td>
+									Absolute cost
+								</td>
+							</tr>
+							</thead>
+							<tbody>
+							{console.log(calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear))}
+							{calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear).map(({year, cost}) => {
+								return (
+									<tr>
+										<td>
+											{year}
+										</td>
+										<td>
+											${cost}
+										</td>
+									</tr>
+								);
+							})}
+							</tbody>
+						</table>
+					</div>
 				)}
 			</div>
 		);

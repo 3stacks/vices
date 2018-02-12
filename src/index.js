@@ -6,5 +6,7 @@ import 'antd/dist/antd.css';
 import App from './components/app/app.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(React.createElement(App), document.getElementById('root'));
-registerServiceWorker();
+(() => {
+	ReactDOM.render(React.createElement(App), document.getElementById('root'));
+	registerServiceWorker();
+})();
