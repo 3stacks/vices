@@ -1,4 +1,5 @@
 import React from 'react';
+import Chart from 'chart.js';
 import {InputNumber, Select, Button} from 'antd';
 const Option = Select.Option;
 
@@ -25,7 +26,24 @@ function calculateAbsoluteCostPerYear(moneyWastedSoFar) {
 	return moneyWastedSoFar + interest;
 }
 
+function getWastedPerYearFromValueAndFrequency(value, frequency) {
+	switch (frequency) {
+		case 'daily':
+			return value * 365;
+		case 'weekly':
+			return value * 52;
+		case 'monthly':
+			return value * 12;
+		case 'annually':
+			return value;
+		default:
+			console.warn('not yet supported');
+	}
+}
+
 export default class App extends React.Component {
+	chartCanvas = null;
+	chart = null;
 	state = {
 		moneyValue: '',
 		frequencyValue: 'daily',
@@ -47,109 +65,88 @@ export default class App extends React.Component {
 				text: 'Annually'
 			}
 		],
-		moneyWastedPerYear: null,
-		moneyWastedPerDecade: null
+		moneyWastedPerYear: null
 	};
 
-	handleCalculateSubmitted = () => {
-		switch (this.state.frequencyValue) {
-			case 'daily':
-				this.setState(state => {
-					const moneyWastedPerDecade = (state.moneyValue * 7) * 752;
+	handleCalculateSubmitted = (event) => {
+		event.preventDefault();
 
-					return {
-						...state,
-						moneyWastedPerYear: state.moneyValue * 365,
-						moneyWastedPerDecade
-					}
-				});
-				break;
-			case 'weekly':
-				this.setState(state => {
-					const moneyWastedPerDecade = state.moneyValue * 752;
-
-					return {
-						...state,
-						moneyWastedPerYear: state.moneyValue * 52,
-						moneyWastedPerDecade
-					}
-				});
-				break;
-			case 'monthly':
-				this.setState(state => {
-					const moneyWastedPerDecade = state.moneyValue * 173;
-
-					return {
-						...state,
-						moneyWastedPerYear: state.moneyValue * 12,
-						moneyWastedPerDecade
-					}
-				});
-				break;
-			case 'annually':
-				this.setState(state => {
-					const moneyWastedPerDecade = (state.moneyValue * 752) * 12;
-
-					return {
-						...state,
-						moneyWastedPerYear: state.moneyValue,
-						moneyWastedPerDecade
-					}
-				});
-				break;
-			default:
-				console.warn('not yet supported');
-		}
+		this.setState(state => {
+			return {
+				...state,
+				moneyWastedPerYear: getWastedPerYearFromValueAndFrequency(
+					this.state.moneyValue,
+					this.state.frequencyValue
+				)
+			};
+		}, () => {
+			const data = calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear);
+			this.chart = new Chart(this.chartCanvas.getContext('2d'), {
+				type: 'line',
+				data: {
+					labels: data.map(item => item.year),
+					datasets: [
+						{
+							label: 'Absolute cost ($)',
+							data: data.map(item => Math.round(item.cost))
+						}
+					]
+				},
+				responsive: true
+			});
+		});
 	};
 
 	render() {
 		return (
 			<div>
-				<label className="label">
-					How much does your vice cost you?
-					<InputNumber
-						placeholder="e.g. 10"
-						formatter={value => `$ ${value}`}
-						value={this.state.moneyValue}
-						onChange={value => {
-							this.setState(state => {
-								return {
-									...state,
-									moneyValue: value
-								};
-							});
-						}}
-					/>
-				</label>
-				<label className="label">
-					How often do you indulge?
-					<Select
-						value={this.state.frequencyValue}
-						onChange={value => {
-							this.setState(state => {
-								return {
-									...state,
-									frequencyValue: value
-								};
-							});
-						}}
+				<form onSubmit={this.handleCalculateSubmitted}>
+					<label className="label">
+						How much does your vice cost you?
+						<InputNumber
+							placeholder="e.g. 10"
+							formatter={value => `$ ${value}`}
+							value={this.state.moneyValue}
+							onChange={value => {
+								this.setState(state => {
+									return {
+										...state,
+										moneyValue: value
+									};
+								});
+							}}
+						/>
+					</label>
+					<label className="label">
+						How often do you indulge?
+						<Select
+							value={this.state.frequencyValue}
+							onChange={value => {
+								this.setState(state => {
+									return {
+										...state,
+										frequencyValue: value
+									};
+								});
+							}}
+						>
+							{this.state.frequencyOptions.map(frequencyOption => {
+								return (
+									<Option value={frequencyOption.value}>
+										{frequencyOption.text}
+									</Option>
+								);
+							})}
+						</Select>
+					</label>
+					<Button
+						type="submit"
 					>
-						{this.state.frequencyOptions.map(frequencyOption => {
-							return (
-								<Option value={frequencyOption.value}>
-									{frequencyOption.text}
-								</Option>
-							);
-						})}
-					</Select>
-				</label>
-				<Button
-					onClick={this.handleCalculateSubmitted}
-				>
-					Calculate
-				</Button>
+						Calculate
+					</Button>
+				</form>
 				{!!this.state.moneyWastedPerYear && (
-					<div>
+					<div style={{maxWidth: 400}}>
 						<dl>
 							<div>
 								<dt>
@@ -159,44 +156,15 @@ export default class App extends React.Component {
 									${this.state.moneyWastedPerYear}
 								</dd>
 							</div>
-							<div>
-								<dt>
-									Approximate cost over 10 years (based on average 4% returns for investments):
-								</dt>
-								<dd>
-									${this.state.moneyWastedPerDecade}
-								</dd>
-							</div>
 						</dl>
 						<p>
 							If you invested that money instead:
 						</p>
-						<table>
-							<thead>
-							<tr>
-								<td>
-									Year
-								</td>
-								<td>
-									Absolute cost
-								</td>
-							</tr>
-							</thead>
-							<tbody>
-							{calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear).map(({year, cost}) => {
-								return (
-									<tr>
-										<td>
-											{year}
-										</td>
-										<td>
-											${Math.round(cost)}
-										</td>
-									</tr>
-								);
-							})}
-							</tbody>
-						</table>
+						<canvas
+							ref={el => this.chartCanvas = el}
+							width="400"
+							height="400"
+						/>
 					</div>
 				)}
 			</div>
