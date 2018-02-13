@@ -41,6 +41,19 @@ function getWastedPerYearFromValueAndFrequency(value, frequency) {
 	}
 }
 
+export function downloadDataURI(contents, name, extension = 'png') {
+	const element = document.createElement('a');
+	element.setAttribute('href', contents);
+	element.setAttribute('download', `${name}.${extension}`);
+
+	element.style.display = 'none';
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
+}
+
 export default class App extends React.Component {
 	chartCanvas = null;
 	chart = null;
@@ -95,6 +108,10 @@ export default class App extends React.Component {
 				responsive: true
 			});
 		});
+	};
+
+	handleSaveButtonPressed = async () => {
+		downloadDataURI(this.chart.toBase64Image(), 'please-stop');
 	};
 
 	render() {
@@ -160,11 +177,19 @@ export default class App extends React.Component {
 						<p>
 							If you invested that money instead:
 						</p>
-						<canvas
-							ref={el => this.chartCanvas = el}
-							width="400"
-							height="400"
-						/>
+						<div>
+							<canvas
+								ref={el => this.chartCanvas = el}
+								width="400"
+								height="400"
+							/>
+						</div>
+						<Button
+							href={this.chart}
+							onClick={this.handleSaveButtonPressed}
+						>
+							Save chart as image
+						</Button>
 					</div>
 				)}
 			</div>
