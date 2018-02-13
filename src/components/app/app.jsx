@@ -93,6 +93,10 @@ export default class App extends React.Component {
 				)
 			};
 		}, () => {
+			if (isNaN(this.state.moneyWastedPerYear)) {
+				return;
+			}
+			
 			const data = calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear);
 			this.chart = new Chart(this.chartCanvas.getContext('2d'), {
 				type: 'line',
@@ -101,7 +105,9 @@ export default class App extends React.Component {
 					datasets: [
 						{
 							label: 'Absolute cost ($)',
-							data: data.map(item => Math.round(item.cost))
+							data: data.map(item => Math.round(item.cost)),
+							borderColor: '#096dd9',
+							backgroundColor: '#40a9ff',
 						}
 					]
 				},
