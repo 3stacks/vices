@@ -107,7 +107,7 @@ export default class App extends React.Component {
 							label: 'Absolute cost ($)',
 							data: data.map(item => Math.round(item.cost)),
 							borderColor: '#096dd9',
-							backgroundColor: '#40a9ff',
+							backgroundColor: '#8dcbff',
 						}
 					]
 				},
@@ -122,84 +122,86 @@ export default class App extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<form onSubmit={this.handleCalculateSubmitted}>
-					<label className="label">
-						How much does your vice cost you?
-						<InputNumber
-							placeholder="e.g. 10"
-							formatter={value => `$ ${value}`}
-							value={this.state.moneyValue}
-							onChange={value => {
-								this.setState(state => {
-									return {
-										...state,
-										moneyValue: value
-									};
-								});
-							}}
-						/>
-					</label>
-					<label className="label">
-						How often do you indulge?
-						<Select
-							value={this.state.frequencyValue}
-							onChange={value => {
-								this.setState(state => {
-									return {
-										...state,
-										frequencyValue: value
-									};
-								});
-							}}
-						>
-							{this.state.frequencyOptions.map(frequencyOption => {
-								return (
-									<Option value={frequencyOption.value}>
-										{frequencyOption.text}
-									</Option>
-								);
-							})}
-						</Select>
-					</label>
-					<Button
-						htmlType="submit"
-						disabled={!this.state.moneyValue}
-					>
-						Calculate
-					</Button>
-				</form>
-				{!!this.state.moneyWastedPerYear && (
-					<div style={{maxWidth: 400}}>
-						<dl>
-							<div>
-								<dt>
-									Cost per year:
-								</dt>
-								<dd>
-									${this.state.moneyWastedPerYear}
-								</dd>
-							</div>
-						</dl>
-						<p>
-							If you invested that money instead:
-						</p>
-						<div>
-							<canvas
-								ref={el => this.chartCanvas = el}
-								width="400"
-								height="400"
+			<main>
+				<div className="max-width-container">
+					<form onSubmit={this.handleCalculateSubmitted}>
+						<label className="label">
+							How much does your vice cost you?
+							<InputNumber
+								placeholder="e.g. 10"
+								formatter={value => `$ ${value}`}
+								value={this.state.moneyValue}
+								onChange={value => {
+									this.setState(state => {
+										return {
+											...state,
+											moneyValue: value
+										};
+									});
+								}}
 							/>
-						</div>
+						</label>
+						<label className="label">
+							How often do you indulge?
+							<Select
+								value={this.state.frequencyValue}
+								onChange={value => {
+									this.setState(state => {
+										return {
+											...state,
+											frequencyValue: value
+										};
+									});
+								}}
+							>
+								{this.state.frequencyOptions.map(frequencyOption => {
+									return (
+										<Option value={frequencyOption.value}>
+											{frequencyOption.text}
+										</Option>
+									);
+								})}
+							</Select>
+						</label>
 						<Button
-							href={this.chart}
-							onClick={this.handleSaveButtonPressed}
+							htmlType="submit"
+							disabled={!this.state.moneyValue}
 						>
-							Save chart as image
+							Calculate
 						</Button>
-					</div>
-				)}
-			</div>
+					</form>
+					{!!this.state.moneyWastedPerYear && (
+						<div style={{maxWidth: 400}}>
+							<dl>
+								<div>
+									<dt>
+										Cost per year:
+									</dt>
+									<dd>
+										${this.state.moneyWastedPerYear}
+									</dd>
+								</div>
+							</dl>
+							<p>
+								If you invested that money instead:
+							</p>
+							<div>
+								<canvas
+									ref={el => this.chartCanvas = el}
+									width="400"
+									height="400"
+								/>
+							</div>
+							<Button
+								href={this.chart}
+								onClick={this.handleSaveButtonPressed}
+							>
+								Save chart as image
+							</Button>
+						</div>
+					)}
+				</div>
+			</main>
 		);
 	}
 }
