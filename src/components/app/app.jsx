@@ -164,6 +164,7 @@ export default class App extends React.Component {
 					</label>
 					<Button
 						htmlType="submit"
+						disabled={!this.state.moneyValue}
 					>
 						Calculate
 					</Button>
