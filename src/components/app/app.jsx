@@ -22,8 +22,20 @@ function calculateAbsoluteCostPerDecade(moneyWastedPerYear, acc = [], cumulative
 }
 
 function calculateAbsoluteCostPerYear(moneyWastedSoFar) {
-	const interest = moneyWastedSoFar * 0.04;
-	return moneyWastedSoFar + interest;
+	/**
+	 * Formula - A = P * (1 + (i / n)) ^ (n * t)
+	 *   e.g. $10,000 * (1 + (15% / 12)) ^ (12 x 1)
+	 *   WHERE:
+	 *   A = Accrued Amount (principal + interest)
+	 *   P = Principal Amount
+	 *   I = Interest Amount
+	 *   R = Annual Nominal Interest Rate in percent
+	 *   r = Annual Nominal Interest Rate as a decimal
+	 *   r = R/100
+	 *   t = Time Involved in years, 0.5 years is calculated as 6 months, etc.
+	 *   n = number of compounding periods per unit t; at the END of each period
+ 	 */
+	return (moneyWastedSoFar * Math.pow((1 + (4/(12*100))), (12)));
 }
 
 function getWastedPerYearFromValueAndFrequency(value, frequency) {
@@ -96,6 +108,10 @@ export default class App extends React.Component {
 			if (isNaN(this.state.moneyWastedPerYear)) {
 				return;
 			}
+
+			if (this.chart !== null) {
+				this.chart.destroy();
+			}
 			
 			const data = calculateAbsoluteCostPerDecade(this.state.moneyWastedPerYear);
 			this.chart = new Chart(this.chartCanvas.getContext('2d'), {
@@ -124,6 +140,9 @@ export default class App extends React.Component {
 		return (
 			<main>
 				<div className="max-width-container">
+					<h1 style={{textAlign: 'center'}}>
+						Vices
+					</h1>
 					<form onSubmit={this.handleCalculateSubmitted}>
 						<label className="label">
 							How much does your vice cost you?
@@ -171,7 +190,7 @@ export default class App extends React.Component {
 						</Button>
 					</form>
 					{!!this.state.moneyWastedPerYear && (
-						<div style={{maxWidth: 400}}>
+						<div>
 							<dl>
 								<div>
 									<dt>
@@ -198,6 +217,17 @@ export default class App extends React.Component {
 							>
 								Save chart as image
 							</Button>
+							<h2 style={{margin: '30px 0'}}>
+								Think about the future you dummy
+							</h2>
+							<h2>
+								Assumptions
+							</h2>
+							<ul>
+								<li>
+									Investment returns are based on an average 4% return rate
+								</li>
+							</ul>
 						</div>
 					)}
 				</div>
