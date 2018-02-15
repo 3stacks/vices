@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const pkg     = require('./package.json');
+const path = require('path');
 module.exports = {
 
     entry: {
-        'app': './src/js/index.jsx',
+        'app': path.resolve('./src/js/index.jsx'),
         'vendor': Object.keys(pkg.dependencies)
     },
     plugins: [
@@ -21,7 +22,7 @@ module.exports = {
         /**
          * Where to spit out all the JS files
          */
-        path: './dist',
+        path: path.resolve('./dist'),
 
         /**
          * What to call the `app` file.
